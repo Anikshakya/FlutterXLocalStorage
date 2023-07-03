@@ -21,6 +21,7 @@ class _LocalImagePageState extends State<LocalImagePage> {
   List categoriesList = [ 'ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ',
                       'ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ',];
   List selectedCategories = [];
+  bool picsadd=false;
 
   @override
   void initState() {
@@ -126,69 +127,74 @@ class _LocalImagePageState extends State<LocalImagePage> {
               Wrap(
                 children: List.generate(_entities!.length, (index) {
                   final AssetEntity entity = _entities![index];
-                    return Column(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                          height: 120,
-                          width: 120,
-                          child: GestureDetector(
-                            onTap: () async {
-                              // moreModalBottomSheet(context, index, entity);
-                              setState(() {
-                                if(!selectedDelete.contains(entity)){
-                                  selectedDelete.add(entity);
-                                }
-                              });
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: ImageItemWidget(
-                                key: ValueKey<int>(index),
-                                entity: entity,
-                                option: const ThumbnailOption(size: ThumbnailSize.square(300)),
+                    return GestureDetector(
+                      onTap: () async {
+                        setState(() {
+                          if(!selectedDelete.contains(entity)){
+                            selectedDelete.add(entity);
+                          }else{
+                              selectedDelete.remove(entity);
+                          }
+                        });
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            height: 120,
+                            width: 120,
+                            child: GestureDetector(
+                              
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: ImageItemWidget(
+                                  key: ValueKey<int>(index),
+                                  entity: entity,
+                                  option: const ThumbnailOption(size: ThumbnailSize.square(300)),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom:16.0,top: 8),
-                          padding: const EdgeInsets.fromLTRB(10,1,20,1),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                          ),
-                          child: SizedBox(
-                            width: 52,
-                            child: Row(
-                              children:[
-                                SizedBox(
-                                  height: 14,
-                                  width: 14,
-                                  child: Transform.scale(
-                                    scale: 0.75,
-                                    child: Checkbox(
-                                      value: false, 
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(2),
+                          Container(
+                            margin: const EdgeInsets.only(bottom:16.0,top: 8),
+                            padding: const EdgeInsets.fromLTRB(10,1,20,1),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                            ),
+                            child: SizedBox(
+                              width: 52,
+                              child: Row(
+                                children:[
+                                  SizedBox(
+                                    height: 14,
+                                    width: 14,
+                                    child: Transform.scale(
+                                      scale: 0.75,
+                                      child: Checkbox(
+                                        value: selectedDelete.contains(entity)?true:false, 
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(2),
+                                        ),
+                                        side: BorderSide(
+                                          color: Colors.grey.withOpacity(0.8), // Border color
+                                          width: 1, // Border width
+                                        ),
+                                        onChanged: (value){
+                                          setState(() {
+                                          });                
+                                        }
                                       ),
-                                      side: BorderSide(
-                                        color: Colors.grey.withOpacity(0.8), // Border color
-                                        width: 1, // Border width
-                                      ),
-                                      onChanged: (value){
-                                                            
-                                      }
                                     ),
                                   ),
-                                ),
-                                const SizedBox(width: 10,),
-                                const Text('ショ', style: TextStyle(color: Colors.blue, fontSize: 12),),
-                              ] 
+                                  const SizedBox(width: 10,),
+                                  const Text('ショ', style: TextStyle(color: Colors.blue, fontSize: 12),),
+                                ] 
+                              ),
                             ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     );
                   })
               ),
