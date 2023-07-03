@@ -59,43 +59,43 @@ class _LocalImagePageState extends State<LocalImagePage> {
 
   appBar(size) {
     return PreferredSize(
-      preferredSize: const Size.fromHeight(60),
+      preferredSize: const Size.fromHeight(50),
       child: Container(
         color: const Color(0XFF9a8c8b),
         padding: EdgeInsets.fromLTRB(size.width * 0.05, 30, size.width * 0.05, 5),
         child: Row(
           children:  [
-            const Icon(Icons.local_hospital, size: 50, color: Colors.orange,),
+            const Icon(Icons.local_hospital, size: 40, color: Colors.orange,),
             const SizedBox(width: 5.0,),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
-                Text('病院', style: TextStyle(fontSize: 10),),
-                Text('リハビリテーション', style: TextStyle(fontSize: 16),),
+                Text('病院', style: TextStyle(fontSize: 9),),
+                Text('リハビリテーション', style: TextStyle(fontSize: 12),),
                 Text('Kurame Rehabilitation Hospital',style: TextStyle(fontSize: 8),)
               ],
             ),
             const Spacer(),
-            const Icon(Icons.camera_enhance, size: 30,),
+            const Icon(Icons.camera_enhance, size: 28,),
             const SizedBox(width: 5.0,),
-            const Text('テーショ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
-            SizedBox(width: size.width*0.06,),
+            const Text('テーショ', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
+            SizedBox(width: size.width*0.076,),
             const Text('リハビリID', style: TextStyle(fontSize: 16),),
-            SizedBox(width: size.width*0.03,),
+            SizedBox(width: size.width*0.032,),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 34),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(8),
               ),
-              child: const Text('ST0012', style: TextStyle(color: Colors.blue, fontSize: 22),),
+              child: const Text('ST0012', style: TextStyle(color: Colors.blue, fontSize: 20),),
             ),
-            SizedBox(width: size.width*0.03,),
+            SizedBox(width: size.width*0.032,),
             TextButton(
               onPressed: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>const LoginPage()));
               }, 
-              child:  const Text('LOGOUT', style: TextStyle(color: Colors.black, fontSize: 20),)
+              child:  const Text('LOGOUT', style: TextStyle(color: Colors.black, fontSize: 18),)
             )
           ],
         ),
@@ -112,7 +112,7 @@ class _LocalImagePageState extends State<LocalImagePage> {
     }
     return Container(
       padding: EdgeInsets.symmetric(horizontal: size.width*0.04),
-      height: size.height*0.58,
+      height: size.height*0.62,
       child: ListView.builder(
         physics: const BouncingScrollPhysics(),
         itemCount: 1,
@@ -133,7 +133,7 @@ class _LocalImagePageState extends State<LocalImagePage> {
                           if(!selectedDelete.contains(entity)){
                             selectedDelete.add(entity);
                           }else{
-                              selectedDelete.remove(entity);
+                            selectedDelete.remove(entity);
                           }
                         });
                       },
@@ -143,15 +143,12 @@ class _LocalImagePageState extends State<LocalImagePage> {
                             margin: const EdgeInsets.symmetric(horizontal: 5),
                             height: 120,
                             width: 120,
-                            child: GestureDetector(
-                              
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: ImageItemWidget(
-                                  key: ValueKey<int>(index),
-                                  entity: entity,
-                                  option: const ThumbnailOption(size: ThumbnailSize.square(300)),
-                                ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: ImageItemWidget(
+                                key: ValueKey<int>(index),
+                                entity: entity,
+                                option: const ThumbnailOption(size: ThumbnailSize.square(300)),
                               ),
                             ),
                           ),
@@ -182,6 +179,11 @@ class _LocalImagePageState extends State<LocalImagePage> {
                                         ),
                                         onChanged: (value){
                                           setState(() {
+                                            if(!selectedDelete.contains(entity)){
+                                              selectedDelete.add(entity);
+                                            }else{
+                                              selectedDelete.remove(entity);
+                                            }
                                           });                
                                         }
                                       ),
@@ -210,7 +212,7 @@ class _LocalImagePageState extends State<LocalImagePage> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: SizedBox(
-        height: 230,
+        height: 218,
         child: Column(
           children: [
             //headings
@@ -245,14 +247,14 @@ class _LocalImagePageState extends State<LocalImagePage> {
               ],
             ),
             Container(
-              height: 205,
+              height: 193,
               color: const Color(0xff1e967a),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //selected images
                   SizedBox(
-                    height: 98,
+                    height: 100,
                     child: selectedDelete.isEmpty ?
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -269,11 +271,11 @@ class _LocalImagePageState extends State<LocalImagePage> {
                       physics: const BouncingScrollPhysics(),
                       padding: const EdgeInsets.symmetric(horizontal: 50),
                       scrollDirection: Axis.horizontal,
-                      separatorBuilder: (context, index) => const SizedBox(width: 6,),
+                      separatorBuilder: (context, index) => const SizedBox(width: 8,),
                       itemCount: selectedDelete.length,
                       itemBuilder: (context, index) {
                         return  Padding(
-                          padding: const EdgeInsets.only(top: 15.0),
+                          padding: const EdgeInsets.only(top: 13.0),
                           child: GestureDetector(
                             onTap: (){
                               //preview
@@ -331,7 +333,7 @@ class _LocalImagePageState extends State<LocalImagePage> {
                                 padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 34),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(selectedDelete.isEmpty ? '          ' : 'YA009349', style: const TextStyle(color: Colors.blue, fontSize: 22),),
                               ),
@@ -360,7 +362,7 @@ class _LocalImagePageState extends State<LocalImagePage> {
                                   padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 34),
                                   decoration: BoxDecoration(
                                     color: selectedDelete.isEmpty ? Colors.grey : Colors.blue,
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: const Text('ビリテーシ', style: TextStyle(color: Colors.white, fontSize: 20),),
                                 ),
@@ -368,10 +370,10 @@ class _LocalImagePageState extends State<LocalImagePage> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 15,),
+                        const SizedBox(height: 10,),
                         //categories
                         SizedBox(
-                          height: 35,
+                          height: 32,
                           child: ListView.separated(
                             padding: const EdgeInsets.symmetric(horizontal:50),
                             shrinkWrap: true,
@@ -386,10 +388,10 @@ class _LocalImagePageState extends State<LocalImagePage> {
                                   setState(() {});
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 34),
+                                  padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 34),
                                   decoration: BoxDecoration(
                                     color: selectedCategories.contains(index) ? Colors.blue : Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Center(child: Text(categoriesList[index], style: TextStyle(color: selectedCategories.contains(index) ? Colors.white : Colors.blue, fontSize: 14,),textAlign: TextAlign.center,)),
                                 ),
