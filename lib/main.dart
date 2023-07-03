@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'views/home_page.dart';
+import 'package:image_test/views/local_image.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Photo Manager Example',
-      home: HomePage(),
+      home: LocalImagePage(),
       debugShowCheckedModeBanner: false,
     );
   }

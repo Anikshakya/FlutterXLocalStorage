@@ -116,12 +116,11 @@ class ImageServices{
   }
 
   //Delete Entities
-  Future <void> deleteFile({context, entity, required File file}) async {
+  Future <void> deleteFile({context, entity, }) async {
     try {
       await PhotoManager.editor.deleteWithIds([entity.id])//This will delete the entity
       .then((value) async{
         // await requestLocalAssets();//Reload The Data after delete
-        Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Deleted Succesfully'),
           )

@@ -1,6 +1,5 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_print, duplicate_ignore
 
-import "dart:io";
 
 import "package:flutter/material.dart";
 import "package:image_test/services/image_services.dart";
@@ -15,17 +14,31 @@ class LocalImagePage extends StatefulWidget {
 }
 
 class _LocalImagePageState extends State<LocalImagePage> {
-  final int _sizePerPage = 150;
-  AssetPathEntity? _path;
   List<AssetEntity>? _entities;
   int totalEntitiesCount = 0;
  dynamic entity;
  dynamic imagefile;
  List selectedDelete =[];
+ List deletedlist =[];
+ 
 
   @override
   void initState() {
+    initalise();
     super.initState();
+  }
+  initalise()async{
+  var entiity = await ImageServices().requestLocalAssets();
+      setState(() {
+        _entities = entiity;
+        for (var i = 0; i < _entities!.length; i++) {
+        entity =_entities![i];
+        }
+      });
+        var emtityFile = await  entity.file;
+        setState(() {
+        imagefile = emtityFile.path;
+        });
   }
 
   @override
@@ -38,47 +51,45 @@ class _LocalImagePageState extends State<LocalImagePage> {
       body: Column(
         children: <Widget>[
           buildBody(context),
-          const SizedBox(
-            height: 200,
-          ),
           selectedImageList(context),
         ],
       ),
-      floatingActionButton: Container(
-        height: 45,
-        width: 200,
-        margin: const EdgeInsets.only(bottom: 20),
-        child: FloatingActionButton(
-          backgroundColor: Colors.deepPurple,
-          shape:  BeveledRectangleBorder(
-            borderRadius: BorderRadius.circular(8)
-          ),
-          onPressed: () async{
-            var entiity = await ImageServices().requestLocalAssets();
-            setState(() {
-              _entities = entiity;
-              for (var i = 0; i < _entities!.length; i++) {
-              entity =_entities![i];
-              }
-            });
-              var emtityFile = await  entity.file;
-              setState(() {
-              imagefile = emtityFile.path;
-              });
-          },
-          child: const Text("Show Local Image")
-        ),
-      ),
+      // floatingActionButton: Container(
+      //   height: 45,
+      //   width: 200,
+      //   margin: const EdgeInsets.only(bottom: 20),
+      //   child: FloatingActionButton(
+      //     backgroundColor: Colors.deepPurple,
+      //     shape:  BeveledRectangleBorder(
+      //       borderRadius: BorderRadius.circular(8)
+      //     ),
+      //     onPressed: () async{
+      //       var entiity = await ImageServices().requestLocalAssets();
+      //       setState(() {
+      //         _entities = entiity;
+      //         for (var i = 0; i < _entities!.length; i++) {
+      //         entity =_entities![i];
+      //         }
+      //       });
+      //         var emtityFile = await  entity.file;
+      //         setState(() {
+      //         imagefile = emtityFile.path;
+      //         });
+      //     },
+      //     child: const Text("Show Local Image")
+      //   ),
+      // ),
     );
   }
 
   selectedImageList(context){
     return Container(
+      height: 220,
       color: Colors.grey,
       child: Column(
         children: [
           SizedBox(
-            height: 150,
+         height: 150,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               separatorBuilder: (context, index) {
@@ -93,19 +104,16 @@ class _LocalImagePageState extends State<LocalImagePage> {
                   padding: const EdgeInsets.only(top: 10.0),
                   child: Stack(
                     children: [
-                      Container(
-                        height: 80,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey
+                      SizedBox(
+                        height: 150,
+                        width: 150,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: ImageItemWidget(
+                            key: ValueKey<int>(index),
+                            entity: selectedDelete[index],
+                            option: const ThumbnailOption(size: ThumbnailSize.square(500)),
                           ),
-                          borderRadius: const BorderRadius.all(
-                              Radius.circular(10.0) //                 <--- border radius here
-                          ),
-                            image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image:FileImage( File(imagefile),) )
                         ),
                       ),
                       Positioned(
@@ -114,7 +122,7 @@ class _LocalImagePageState extends State<LocalImagePage> {
                         child: GestureDetector(
                           onTap: (){
                             setState(() {
-                            selectedDelete.remove(selectedDelete[index]);
+                            selectedDelete.removeAt(index);
                             });
                           },
                           child: const Icon(
@@ -136,6 +144,7 @@ class _LocalImagePageState extends State<LocalImagePage> {
                   const Text('Button ID 1'),
                   SizedBox(width: 200,
                     child: ElevatedButton(
+                      // ignore: avoid_print
                       onPressed: () => print("it's pressed"),
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white, backgroundColor: Colors.orange,
@@ -206,20 +215,24 @@ class _LocalImagePageState extends State<LocalImagePage> {
                     width: 200,
                     child: ElevatedButton(
                       onPressed: () async{
-                        dynamic file;
+                        setState(() {
+                        });
                         for (var i = 0; i < selectedDelete.length; i++) {
-                          file = await selectedDelete[i].file;
                         await ImageServices().deleteFile(
                           context: context, 
                           entity: selectedDelete[i], 
-                          file: file
                         ).then((value) async{
                           var entiity = await ImageServices().requestLocalAssets();
                           setState(() {
-                            _entities = entiity;
+                          _entities = entiity;
+                          // selectedDelete.removeAt(i);
                           });
-                        });
+                         
+
                         }
+                        );   
+                      }
+                      selectedDelete.clear();
                       },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white, backgroundColor: Colors.blue,
@@ -252,11 +265,12 @@ class _LocalImagePageState extends State<LocalImagePage> {
       return const Center(child: Text('No assets found on this device.'));
     }
     return SizedBox(
-      height: 600,
+      height: 350,
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4,
-          childAspectRatio: 2/3
+          childAspectRatio: 1,
+          mainAxisSpacing: 5.0,
         ),
         itemCount: _entities!.length,
         itemBuilder: (BuildContext context, int index) {
@@ -370,11 +384,9 @@ class _LocalImagePageState extends State<LocalImagePage> {
                         backgroundColor: Colors.deepPurple
                       ),
                       onPressed: ()async{
-                        final file = await entity.file;
                         await ImageServices().deleteFile(
                           context: context, 
                           entity: entity, 
-                          file: file
                         ).then((value) async{
                           var entiity = await ImageServices().requestLocalAssets();
                           setState(() {
