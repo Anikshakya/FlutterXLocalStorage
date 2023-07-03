@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:image_test/views/local_image.dart';
+import 'package:flutter/services.dart';
+import 'package:image_test/views/auth/login_page.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
   runApp(const MyApp());
 }
 
@@ -12,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Photo Manager Example',
-      home: LocalImagePage(),
+      home: LoginPage(),
       debugShowCheckedModeBanner: false,
     );
   }

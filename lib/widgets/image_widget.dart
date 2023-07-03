@@ -38,7 +38,6 @@ class ImageItemWidget extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-
       ],
     );
   }

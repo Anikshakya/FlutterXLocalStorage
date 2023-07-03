@@ -1,8 +1,6 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print, duplicate_ignore
-
-
 import "package:flutter/material.dart";
 import "package:image_test/services/image_services.dart";
+import "package:image_test/views/auth/login_page.dart";
 import "package:image_test/widgets/image_widget.dart";
 import "package:photo_manager/photo_manager.dart";
 
@@ -16,325 +14,393 @@ class LocalImagePage extends StatefulWidget {
 class _LocalImagePageState extends State<LocalImagePage> {
   List<AssetEntity>? _entities;
   int totalEntitiesCount = 0;
- dynamic entity;
- dynamic imagefile;
- List selectedDelete =[];
- List deletedlist =[];
- 
+  dynamic entity;
+  dynamic imagefile;
+  List selectedDelete =[];
+  List deletedlist =[];
+  List categoriesList = [ 'ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ',
+                      'ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ',];
+  List selectedCategories = [];
 
   @override
   void initState() {
     initalise();
     super.initState();
   }
+
   initalise()async{
-  var entiity = await ImageServices().requestLocalAssets();
-      setState(() {
-        _entities = entiity;
-        for (var i = 0; i < _entities!.length; i++) {
-        entity =_entities![i];
-        }
-      });
-        var emtityFile = await  entity.file;
-        setState(() {
-        imagefile = emtityFile.path;
-        });
+    var entiity = await ImageServices().requestLocalAssets();
+    setState(() {
+      _entities = entiity;
+      for (var i = 0; i < _entities!.length; i++) {
+      entity =_entities![i];
+      }
+    });
+    var emtityFile = await  entity.file;
+    setState(() {
+      imagefile = emtityFile.path;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
-        title: const Text("Local Images")
-      ),
-      body: Column(
+      appBar: appBar(size),
+      body: Stack(
         children: <Widget>[
-          buildBody(context),
-          selectedImageList(context),
+          buildBody(context,size),
+          selectedImageList(context,size),
         ],
       ),
-      // floatingActionButton: Container(
-      //   height: 45,
-      //   width: 200,
-      //   margin: const EdgeInsets.only(bottom: 20),
-      //   child: FloatingActionButton(
-      //     backgroundColor: Colors.deepPurple,
-      //     shape:  BeveledRectangleBorder(
-      //       borderRadius: BorderRadius.circular(8)
-      //     ),
-      //     onPressed: () async{
-      //       var entiity = await ImageServices().requestLocalAssets();
-      //       setState(() {
-      //         _entities = entiity;
-      //         for (var i = 0; i < _entities!.length; i++) {
-      //         entity =_entities![i];
-      //         }
-      //       });
-      //         var emtityFile = await  entity.file;
-      //         setState(() {
-      //         imagefile = emtityFile.path;
-      //         });
-      //     },
-      //     child: const Text("Show Local Image")
-      //   ),
-      // ),
     );
   }
 
-  selectedImageList(context){
-    return Container(
-      height: 220,
-      color: Colors.grey,
-      child: Column(
-        children: [
-          SizedBox(
-         height: 150,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              separatorBuilder: (context, index) {
-                return const SizedBox(
-                  height: 20,
-                  width: 10,
-                );
-              },
-              itemCount: selectedDelete.length,
-              itemBuilder: (context, index) {
-                return  Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: Stack(
-                    children: [
-                      SizedBox(
-                        height: 150,
-                        width: 150,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: ImageItemWidget(
-                            key: ValueKey<int>(index),
-                            entity: selectedDelete[index],
-                            option: const ThumbnailOption(size: ThumbnailSize.square(500)),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: (){
-                            setState(() {
-                            selectedDelete.removeAt(index);
-                            });
-                          },
-                          child: const Icon(
-                            Icons.cancel,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }, 
+  appBar(size) {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(60),
+      child: Container(
+        color: const Color(0XFF9a8c8b),
+        padding: EdgeInsets.fromLTRB(size.width * 0.05, 30, size.width * 0.05, 5),
+        child: Row(
+          children:  [
+            const Icon(Icons.local_hospital, size: 50, color: Colors.orange,),
+            const SizedBox(width: 5.0,),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text('病院', style: TextStyle(fontSize: 10),),
+                Text('リハビリテーション', style: TextStyle(fontSize: 16),),
+                Text('Kurame Rehabilitation Hospital',style: TextStyle(fontSize: 8),)
+              ],
             ),
-          ),
-          Row(
-            children: [
-              Column(
-                children: [
-                  const Text('Button ID 1'),
-                  SizedBox(width: 200,
-                    child: ElevatedButton(
-                      // ignore: avoid_print
-                      onPressed: () => print("it's pressed"),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white, backgroundColor: Colors.orange,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      child: const Text("ST0012"),
-                    ),
-                  )
-                ],
+            const Spacer(),
+            const Icon(Icons.camera_enhance, size: 30,),
+            const SizedBox(width: 5.0,),
+            const Text('テーショ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
+            SizedBox(width: size.width*0.06,),
+            const Text('リハビリID', style: TextStyle(fontSize: 16),),
+            SizedBox(width: size.width*0.03,),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 34),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
               ),
-              const SizedBox(
-                width: 20,
-              ),
-              Column(
-                children: [
-                const Text('Button ID 2'),
-                  SizedBox(
-                    width: 200,
-                    child: ElevatedButton(
-                      onPressed: () => print("it's pressed"),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white, backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      child: const Text("YA0909110",style: TextStyle(
-                        color: Colors.blue
-                      ),),
-                    ),
-                  )
-                  
-                ],
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              Column(
-                children: [
-                const Text('Button ID 3'),
-                  SizedBox(
-                    width: 200,
-                    child: ElevatedButton(
-                      onPressed: () => print("it's pressed"),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white, backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      child: const Text("T010909110",style: TextStyle(
-                        color: Colors.blue
-                      ),),
-                    ),
-                  )
-                  
-                ],
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              Column(
-                children: [
-                const Text('Button ID 4'),
-                  SizedBox(
-                    width: 200,
-                    child: ElevatedButton(
-                      onPressed: () async{
-                        setState(() {
-                        });
-                        for (var i = 0; i < selectedDelete.length; i++) {
-                        await ImageServices().deleteFile(
-                          context: context, 
-                          entity: selectedDelete[i], 
-                        ).then((value) async{
-                          var entiity = await ImageServices().requestLocalAssets();
-                          setState(() {
-                          _entities = entiity;
-                          // selectedDelete.removeAt(i);
-                          });
-                         
-
-                        }
-                        );   
-                      }
-                      selectedDelete.clear();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white, backgroundColor: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      child: const Text("YA0909110",style: TextStyle(
-                        color: Colors.white
-                      ),),
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-            ],
-          )
-        ],
-      ),
+              child: const Text('ST0012', style: TextStyle(color: Colors.blue, fontSize: 22),),
+            ),
+            SizedBox(width: size.width*0.03,),
+            TextButton(
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>const LoginPage()));
+              }, 
+              child:  const Text('LOGOUT', style: TextStyle(color: Colors.black, fontSize: 20),)
+            )
+          ],
+        ),
+      )
     );
   }
 
-  buildBody(BuildContext context) {
+  buildBody(BuildContext context, size) {
     if (_entities == null) {
       return const Center(child: Text('Click on the show image button to display local images'));
     }
     if (_entities!.isEmpty) {
       return const Center(child: Text('No assets found on this device.'));
     }
-    return SizedBox(
-      height: 350,
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
-          childAspectRatio: 1,
-          mainAxisSpacing: 5.0,
-        ),
-        itemCount: _entities!.length,
-        itemBuilder: (BuildContext context, int index) {
-          final AssetEntity entity = _entities![index];
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Container(
-                  height: 200,
-                  width: 300,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 3.0,
-                      color: Colors.grey
-                    ),
-                    borderRadius: const BorderRadius.all(
-                        Radius.circular(20.0) //                 <--- border radius here
-                    ),
-                  ),
-                  child: GestureDetector(
-                    onTap: () async {
-                      // moreModalBottomSheet(context, index, entity);
-                      setState(() {
-                        if(!selectedDelete.contains(entity)){
-                          selectedDelete.add(entity);
-                        }
-                      });
-                    },
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: ImageItemWidget(
-                          key: ValueKey<int>(index),
-                          entity: entity,
-                          option: const ThumbnailOption(size: ThumbnailSize.square(500)),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: size.width*0.04),
+      height: size.height*0.58,
+      child: ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        itemCount: 1,
+        shrinkWrap: true,
+        itemBuilder: (context,index){
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10,),
+              const Text('テーショ', style: TextStyle(color: Colors.blue, fontSize: 14),),
+              const SizedBox(height: 10,),
+              Wrap(
+                children: List.generate(_entities!.length, (index) {
+                  final AssetEntity entity = _entities![index];
+                    return Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          height: 120,
+                          width: 120,
+                          child: GestureDetector(
+                            onTap: () async {
+                              // moreModalBottomSheet(context, index, entity);
+                              setState(() {
+                                if(!selectedDelete.contains(entity)){
+                                  selectedDelete.add(entity);
+                                }
+                              });
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: ImageItemWidget(
+                                key: ValueKey<int>(index),
+                                entity: entity,
+                                option: const ThumbnailOption(size: ThumbnailSize.square(300)),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    // child: Container(
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: const BorderRadius.all(
-                    //         Radius.circular(20.0) //                 <--- border radius here
-                    //     ),
-                    //     image: DecorationImage(
-                    //       fit: BoxFit.fill,
-                    //       image:FileImage( File(imagefile),) )
-                    //   ),
-                    // )
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.all(15.0),
-                  padding: const EdgeInsets.all(3.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blueAccent)
-                  ),
-                  child: Text('Image $index'),
-                )
-              ],
-            ),
+                        Container(
+                          margin: const EdgeInsets.only(bottom:16.0,top: 8),
+                          padding: const EdgeInsets.fromLTRB(10,1,20,1),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                          ),
+                          child: SizedBox(
+                            width: 52,
+                            child: Row(
+                              children:[
+                                SizedBox(
+                                  height: 14,
+                                  width: 14,
+                                  child: Transform.scale(
+                                    scale: 0.75,
+                                    child: Checkbox(
+                                      value: false, 
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(2),
+                                      ),
+                                      side: BorderSide(
+                                        color: Colors.grey.withOpacity(0.8), // Border color
+                                        width: 1, // Border width
+                                      ),
+                                      onChanged: (value){
+                                                            
+                                      }
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10,),
+                                const Text('ショ', style: TextStyle(color: Colors.blue, fontSize: 12),),
+                              ] 
+                            ),
+                          ),
+                        )
+                      ],
+                    );
+                  })
+              ),
+              const SizedBox(height: 50,)
+            ],
           );
         },
+      )
+    );
+  }
+
+  selectedImageList(context,size){
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SizedBox(
+        height: 230,
+        child: Column(
+          children: [
+            //headings
+            Row(
+              children: [
+                const SizedBox(width: 50,),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal:50),
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                    ),
+                    color: Color(0xff1e967a),
+                  ),
+                  height: 25,
+                  child: const Text('テーショ'),
+                ),
+                const SizedBox(width: 50,),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal:50),
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                    ),
+                    color: Color(0xffca9891),
+                  ),
+                  height: 25,
+                  child: const Text('テーショ'),
+                ),
+              ],
+            ),
+            Container(
+              height: 205,
+              color: const Color(0xff1e967a),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //selected images
+                  SizedBox(
+                    height: 98,
+                    child: selectedDelete.isEmpty ?
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text('Step 1: リハビリテーション リハビリテー', style: TextStyle(color: Colors.white,fontSize: 18, fontWeight: FontWeight.w300),),
+                          Text('Step 2: リハビリテーション リハビリテー リハビリテー', style: TextStyle(color: Colors.white,fontSize: 18, fontWeight: FontWeight.w300),),
+                        ],
+                      ),
+                    ):
+                    ListView.separated(
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(horizontal: 50),
+                      scrollDirection: Axis.horizontal,
+                      separatorBuilder: (context, index) => const SizedBox(width: 6,),
+                      itemCount: selectedDelete.length,
+                      itemBuilder: (context, index) {
+                        return  Padding(
+                          padding: const EdgeInsets.only(top: 15.0),
+                          child: GestureDetector(
+                            onTap: (){
+                              //preview
+                            },
+                            child: Stack(
+                              children: [
+                                SizedBox(
+                                  height: 75,
+                                  width: 75,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: ImageItemWidget(
+                                      key: ValueKey<int>(index),
+                                      entity: selectedDelete[index],
+                                      option: const ThumbnailOption(size: ThumbnailSize.square(500)),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 3,
+                                  right: 3,
+                                  child: GestureDetector(
+                                    onTap: (){
+                                      setState(() {
+                                      selectedDelete.removeAt(index);
+                                      });
+                                    },
+                                    child: const Icon(
+                                      Icons.cancel,
+                                      size: 20,
+                                      color: Colors.white
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }, 
+                    ),
+                  ),
+                  //Id 
+                  SizedBox(
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        //ID
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 50),
+                          child: Row(
+                            children: [
+                              const Text('ーシID',style: TextStyle(fontSize: 18),),
+                              const SizedBox(width: 20,),
+                              Container(
+                                padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 34),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(selectedDelete.isEmpty ? '          ' : 'YA009349', style: const TextStyle(color: Colors.blue, fontSize: 22),),
+                              ),
+                              const Spacer(),
+                              Text(selectedDelete.length.toString(),style: const TextStyle(fontSize: 26),),
+                              const Text('   病院ビ',style: TextStyle(fontSize: 18),),
+                              const SizedBox(width: 20,),
+                              GestureDetector(
+                                onTap: () async{
+                                  setState(() {});
+                                  for (var i = 0; i < selectedDelete.length; i++) {
+                                    await ImageServices().deleteFile(
+                                      context: context, 
+                                      entity: selectedDelete[i], 
+                                    ).then((value) async{
+                                      var entiity = await ImageServices().requestLocalAssets();
+                                      setState(() {
+                                        _entities = entiity;
+                                      });
+                                    }
+                                  );   
+                                }
+                                selectedDelete.clear();
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 34),
+                                  decoration: BoxDecoration(
+                                    color: selectedDelete.isEmpty ? Colors.grey : Colors.blue,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: const Text('ビリテーシ', style: TextStyle(color: Colors.white, fontSize: 20),),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 15,),
+                        //categories
+                        SizedBox(
+                          height: 35,
+                          child: ListView.separated(
+                            padding: const EdgeInsets.symmetric(horizontal:50),
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            separatorBuilder: (context, index) => const SizedBox(width: 8,),
+                            itemCount: categoriesList.length,
+                            itemBuilder: (context,index){
+                              return GestureDetector(
+                                onTap: (){
+                                  selectedCategories.contains(index) ? selectedCategories.remove(index) : selectedCategories.add(index);
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 34),
+                                  decoration: BoxDecoration(
+                                    color: selectedCategories.contains(index) ? Colors.blue : Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(child: Text(categoriesList[index], style: TextStyle(color: selectedCategories.contains(index) ? Colors.white : Colors.blue, fontSize: 14,),textAlign: TextAlign.center,)),
+                                ),
+                              );
+                            }
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
-    
   }
 
   getfile(file)async{
@@ -393,32 +459,6 @@ class _LocalImagePageState extends State<LocalImagePage> {
                             _entities = entiity;
                           });
                         });
-                        // Directory destinationDir = Directory(file.parent.path);
-                        // if (!destinationDir.existsSync()) {
-                        //   destinationDir.createSync(recursive: true);
-                        // }
-                        // bool fileExists = await file.exists();
-                        // if (fileExists) {
-                        //   // File exists, proceed with deletion
-                        //   bool deleted = await FileUtils.deleteFile(file.path);
-                        //   if (deleted) {
-                        //     // File deleted successfully
-                        //     debugdebugPrint("Deleted");
-                        //     Navigator.pop(context);
-                        //     ScaffoldMessenger.of(context).showSnackBar(
-                        //       const SnackBar(content: Text('Deleted Succesfully'))
-                        //     );
-                        //   } else {
-                        //     // Failed to delete the file
-                        //     Navigator.pop(context);
-                        //     ScaffoldMessenger.of(context).showSnackBar(
-                        //       const SnackBar(content: Text('An error occurred while deleting the file'))
-                        //     );
-                        //     debugdebugPrint("Failed To delete");
-                        //   }
-                        // } else {
-                        //   // File does not exist at the specified path
-                        // }
                       }, 
                       child: const Text("Delete Image")
                     ),
@@ -431,4 +471,6 @@ class _LocalImagePageState extends State<LocalImagePage> {
       }
     );
   }
+  
+
 }
