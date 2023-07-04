@@ -122,7 +122,9 @@ class ImageServices{
       .then((value) async{
         // await requestLocalAssets();//Reload The Data after delete
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Deleted Succesfully'),
+          const SnackBar(
+            content: Text('Deleted Succesfully'),
+            duration: Duration(seconds: 1),
           )
         );
       });

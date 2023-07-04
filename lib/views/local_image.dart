@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:image_test/services/image_services.dart";
+import "package:image_test/styles/styles.dart";
 import "package:image_test/views/auth/login_page.dart";
 import "package:image_test/views/preview_image.dart";
 import "package:image_test/widgets/image_widget.dart";
@@ -50,11 +51,14 @@ class _LocalImagePageState extends State<LocalImagePage> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: appBar(size),
-      body: Stack(
-        children: <Widget>[
-          buildBody(context,size),
-          selectedImageList(context,size),
-        ],
+      body: ScrollConfiguration(
+        behavior:NoGlowScrollBehavior(),
+        child: Stack(
+          children: [
+            deviceImages(context,size),
+            selectedImages(context,size),
+          ],
+        ),
       ),
     );
   }
@@ -105,112 +109,117 @@ class _LocalImagePageState extends State<LocalImagePage> {
     );
   }
 
-  buildBody(BuildContext context, size) {
-    if (_entities == null) {
-      return const Center(child: Text('Click on the show image button to display local images'));
-    }
-    if (_entities!.isEmpty) {
-      return const Center(child: Text('No assets found on this device.'));
-    }
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: size.width*0.04),
-      height: size.height*0.62,
-      child: ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        itemCount: 1,
-        shrinkWrap: true,
-        itemBuilder: (context,index){
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10,),
-              const Text('テーショ', style: TextStyle(color: Colors.blue, fontSize: 14),),
-              const SizedBox(height: 10,),
-              Wrap(
-                children: List.generate(_entities!.length, (index)  {
-                  final AssetEntity entity = _entities![index];
-                  return GestureDetector(
-                    onTap: () async {
-                      setState(() {
-                        if(!selectedDelete.contains(entity)){
-                          selectedDelete.add(entity);
-                        }else{
-                          selectedDelete.remove(entity);
-                        }
-                      });
-                    },
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                          height: 120,
-                          width: 120,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: ImageItemWidget(
-                              key: ValueKey<int>(index),
-                              entity: entity,
-                              option: const ThumbnailOption(size: ThumbnailSize.square(300)),
+  deviceImages(BuildContext context, size) {
+    return RefreshIndicator(
+      color: const Color(0xff1e967a),
+      onRefresh: (){
+        return Future.delayed(const Duration(seconds: 1),()async{
+          await initalise();
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: size.width*0.04),
+        height: size.height*0.62,
+        child: ListView.builder(
+          itemCount: 1,
+          shrinkWrap: true,
+          itemBuilder: (context,index){
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10,),
+                const Text('テーショ', style: TextStyle(color: Colors.blue, fontSize: 14),),
+                const SizedBox(height: 10,),
+                _entities == null ? 
+                const Center(child: Text('No images found on this device')) :
+                _entities!.isEmpty ?
+                const Center(child: Text('No images found on this device')) :
+                Wrap(
+                  children: List.generate(_entities!.length, (index)  {
+                    final AssetEntity entity = _entities![index];
+                    return GestureDetector(
+                      onTap: () async {
+                        setState(() {
+                          if(!selectedDelete.contains(entity)){
+                            selectedDelete.add(entity);
+                          }else{
+                            selectedDelete.remove(entity);
+                          }
+                        });
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            height: 120,
+                            width: 120,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: ImageItemWidget(
+                                key: ValueKey<int>(index),
+                                entity: entity,
+                                option: const ThumbnailOption(size: ThumbnailSize.square(300)),
+                              ),
                             ),
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom:16.0,top: 8),
-                          padding: const EdgeInsets.fromLTRB(10,1,20,1),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                          ),
-                          child: SizedBox(
-                            width: 52,
-                            child: Row(
-                              children:[
-                                SizedBox(
-                                  height: 14,
-                                  width: 14,
-                                  child: Transform.scale(
-                                    scale: 0.75,
-                                    child: Checkbox(
-                                      value: selectedDelete.contains(entity)?true:false, 
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(2),
+                          Container(
+                            margin: const EdgeInsets.only(bottom:16.0,top: 8),
+                            padding: const EdgeInsets.fromLTRB(10,1,20,1),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                            ),
+                            child: SizedBox(
+                              width: 52,
+                              child: Row(
+                                children:[
+                                  SizedBox(
+                                    height: 14,
+                                    width: 14,
+                                    child: Transform.scale(
+                                      scale: 0.75,
+                                      child: Checkbox(
+                                        value: selectedDelete.contains(entity)?true:false, 
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(2),
+                                        ),
+                                        side: BorderSide(
+                                          color: Colors.grey.withOpacity(0.8), // Border color
+                                          width: 1, // Border width
+                                        ),
+                                        onChanged: (value){
+                                          setState(() {
+                                            if(!selectedDelete.contains(entity)){
+                                              selectedDelete.add(entity);
+                                            }else{
+                                              selectedDelete.remove(entity);
+                                            }
+                                          });                
+                                        }
                                       ),
-                                      side: BorderSide(
-                                        color: Colors.grey.withOpacity(0.8), // Border color
-                                        width: 1, // Border width
-                                      ),
-                                      onChanged: (value){
-                                        setState(() {
-                                          if(!selectedDelete.contains(entity)){
-                                            selectedDelete.add(entity);
-                                          }else{
-                                            selectedDelete.remove(entity);
-                                          }
-                                        });                
-                                      }
                                     ),
                                   ),
-                                ),
-                                const SizedBox(width: 10,),
-                                const Text('ショ', style: TextStyle(color: Colors.blue, fontSize: 12),),
-                              ] 
+                                  const SizedBox(width: 10,),
+                                  const Text('ショ', style: TextStyle(color: Colors.blue, fontSize: 12),),
+                                ] 
+                              ),
                             ),
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                })
-              ),
-              const SizedBox(height: 50,)
-            ],
-          );
-        },
-      )
+                          )
+                        ],
+                      ),
+                    );
+                  })
+                ),
+                const SizedBox(height: 50,)
+              ],
+            );
+          },
+        )
+      ),
     );
   }
 
-  selectedImageList(context,size){
+  selectedImages(context,size){
     return Align(
       alignment: Alignment.bottomCenter,
       child: SizedBox(
@@ -498,6 +507,5 @@ class _LocalImagePageState extends State<LocalImagePage> {
       }
     );
   }
-  
 
 }
