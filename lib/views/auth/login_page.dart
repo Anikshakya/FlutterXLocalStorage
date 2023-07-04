@@ -10,6 +10,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController conStaffId = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -82,7 +84,18 @@ class _LoginPageState extends State<LoginPage> {
               ),
               onPressed: () {
               },
-              child: const Text('S200012', style: TextStyle(fontSize: 20),),
+              child: Center(
+                child: TextFormField(
+                  controller: conStaffId,
+                  style: const TextStyle(fontSize: 20),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.transparent,
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(left: size.width * 0.05, bottom: 8.0, top: 4.0, right: size.width * 0.05),
+                  ),
+                ),
+              ),
             ),
           ),
           SizedBox(height: size.height * 0.07,),

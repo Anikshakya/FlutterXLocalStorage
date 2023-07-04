@@ -13,6 +13,7 @@ class LocalImagePage extends StatefulWidget {
 }
 
 class _LocalImagePageState extends State<LocalImagePage> {
+  TextEditingController idCon = TextEditingController();
   List<AssetEntity>? _entities;
   int totalEntitiesCount = 0;
   dynamic entity;
@@ -337,12 +338,22 @@ class _LocalImagePageState extends State<LocalImagePage> {
                               const Text('ーシID',style: TextStyle(fontSize: 18),),
                               const SizedBox(width: 20,),
                               Container(
-                                padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 34),
+                                height: 40,
+                                width: size.width * 0.15,
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: Text(selectedDelete.isEmpty ? '          ' : 'YA009349', style: const TextStyle(color: Colors.blue, fontSize: 22),),
+                                child: TextFormField(
+                                  controller: idCon,
+                                  style: const TextStyle(color: Colors.blue, fontSize: 22),
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.transparent,
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.only(left: size.width * 0.03, bottom: 8.0, top: 4.0, right: size.width * 0.03),
+                                  ),
+                                ),
                               ),
                               const Spacer(),
                               Text(selectedDelete.length.toString(),style: const TextStyle(fontSize: 26),),
