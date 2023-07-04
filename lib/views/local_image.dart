@@ -283,7 +283,6 @@ class _LocalImagePageState extends State<LocalImagePage> {
                               //preview
                               Navigator.push(context, MaterialPageRoute(builder: (context)=>
                                 ViewFullScreenImage(
-                                  keys: ValueKey<int>(index),
                                   entity: selectedDelete[index],
                                 )
                               ));

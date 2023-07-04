@@ -3,9 +3,9 @@ import "package:image_test/widgets/image_widget.dart";
 import "package:photo_manager/photo_manager.dart";
 
 class ViewFullScreenImage extends StatelessWidget {
-  final dynamic keys, entity;
+  final dynamic entity;
   
-  const ViewFullScreenImage({super.key, this.keys, this.entity});
+  const ViewFullScreenImage({super.key, this.entity});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,6 @@ class ViewFullScreenImage extends StatelessWidget {
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: ImageItemWidget(
-                  key: keys,
                   entity: entity,
                   option: const ThumbnailOption(size: ThumbnailSize.square(500)),
                 ),
