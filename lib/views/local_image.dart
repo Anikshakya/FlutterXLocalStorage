@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:image_test/services/image_services.dart";
 import "package:image_test/views/auth/login_page.dart";
+import "package:image_test/views/preview_image.dart";
 import "package:image_test/widgets/image_widget.dart";
 import "package:photo_manager/photo_manager.dart";
 
@@ -18,8 +19,8 @@ class _LocalImagePageState extends State<LocalImagePage> {
   dynamic imagefile;
   List selectedDelete =[];
   List deletedlist =[];
-  List categoriesList = [ 'ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ',
-                      'ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ','ビリテーシ',];
+  List categoriesList = [ 'カテゴリー','カテゴリー','カテゴリー','カテゴリー','カテゴリー','カテゴリー',
+                      'カテゴリー','カテゴリー','カテゴリー','カテゴリー','カテゴリー','カテゴリー',];
   List selectedCategories = [];
   bool picsadd=false;
 
@@ -125,80 +126,80 @@ class _LocalImagePageState extends State<LocalImagePage> {
               const Text('テーショ', style: TextStyle(color: Colors.blue, fontSize: 14),),
               const SizedBox(height: 10,),
               Wrap(
-                children: List.generate(_entities!.length, (index) {
+                children: List.generate(_entities!.length, (index)  {
                   final AssetEntity entity = _entities![index];
-                    return GestureDetector(
-                      onTap: () async {
-                        setState(() {
-                          if(!selectedDelete.contains(entity)){
-                            selectedDelete.add(entity);
-                          }else{
-                            selectedDelete.remove(entity);
-                          }
-                        });
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 5),
-                            height: 120,
-                            width: 120,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: ImageItemWidget(
-                                key: ValueKey<int>(index),
-                                entity: entity,
-                                option: const ThumbnailOption(size: ThumbnailSize.square(300)),
-                              ),
+                  return GestureDetector(
+                    onTap: () async {
+                      setState(() {
+                        if(!selectedDelete.contains(entity)){
+                          selectedDelete.add(entity);
+                        }else{
+                          selectedDelete.remove(entity);
+                        }
+                      });
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          height: 120,
+                          width: 120,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: ImageItemWidget(
+                              key: ValueKey<int>(index),
+                              entity: entity,
+                              option: const ThumbnailOption(size: ThumbnailSize.square(300)),
                             ),
                           ),
-                          Container(
-                            margin: const EdgeInsets.only(bottom:16.0,top: 8),
-                            padding: const EdgeInsets.fromLTRB(10,1,20,1),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                            ),
-                            child: SizedBox(
-                              width: 52,
-                              child: Row(
-                                children:[
-                                  SizedBox(
-                                    height: 14,
-                                    width: 14,
-                                    child: Transform.scale(
-                                      scale: 0.75,
-                                      child: Checkbox(
-                                        value: selectedDelete.contains(entity)?true:false, 
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(2),
-                                        ),
-                                        side: BorderSide(
-                                          color: Colors.grey.withOpacity(0.8), // Border color
-                                          width: 1, // Border width
-                                        ),
-                                        onChanged: (value){
-                                          setState(() {
-                                            if(!selectedDelete.contains(entity)){
-                                              selectedDelete.add(entity);
-                                            }else{
-                                              selectedDelete.remove(entity);
-                                            }
-                                          });                
-                                        }
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(bottom:16.0,top: 8),
+                          padding: const EdgeInsets.fromLTRB(10,1,20,1),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                          ),
+                          child: SizedBox(
+                            width: 52,
+                            child: Row(
+                              children:[
+                                SizedBox(
+                                  height: 14,
+                                  width: 14,
+                                  child: Transform.scale(
+                                    scale: 0.75,
+                                    child: Checkbox(
+                                      value: selectedDelete.contains(entity)?true:false, 
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(2),
                                       ),
+                                      side: BorderSide(
+                                        color: Colors.grey.withOpacity(0.8), // Border color
+                                        width: 1, // Border width
+                                      ),
+                                      onChanged: (value){
+                                        setState(() {
+                                          if(!selectedDelete.contains(entity)){
+                                            selectedDelete.add(entity);
+                                          }else{
+                                            selectedDelete.remove(entity);
+                                          }
+                                        });                
+                                      }
                                     ),
                                   ),
-                                  const SizedBox(width: 10,),
-                                  const Text('ショ', style: TextStyle(color: Colors.blue, fontSize: 12),),
-                                ] 
-                              ),
+                                ),
+                                const SizedBox(width: 10,),
+                                const Text('ショ', style: TextStyle(color: Colors.blue, fontSize: 12),),
+                              ] 
                             ),
-                          )
-                        ],
-                      ),
-                    );
-                  })
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                })
               ),
               const SizedBox(height: 50,)
             ],
@@ -279,6 +280,12 @@ class _LocalImagePageState extends State<LocalImagePage> {
                           child: GestureDetector(
                             onTap: (){
                               //preview
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                ViewFullScreenImage(
+                                  keys: ValueKey<int>(index),
+                                  entity: selectedDelete[index],
+                                )
+                              ));
                             },
                             child: Stack(
                               children: [
@@ -341,6 +348,7 @@ class _LocalImagePageState extends State<LocalImagePage> {
                               Text(selectedDelete.length.toString(),style: const TextStyle(fontSize: 26),),
                               const Text('   病院ビ',style: TextStyle(fontSize: 18),),
                               const SizedBox(width: 20,),
+                              //Delete
                               GestureDetector(
                                 onTap: () async{
                                   setState(() {});
