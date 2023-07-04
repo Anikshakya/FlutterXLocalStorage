@@ -338,20 +338,21 @@ class _LocalImagePageState extends State<LocalImagePage> {
                               const Text('ーシID',style: TextStyle(fontSize: 18),),
                               const SizedBox(width: 20,),
                               Container(
-                                height: 40,
-                                width: size.width * 0.15,
+                                height: 38,
+                                width: size.width * 0.14,
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: TextFormField(
                                   controller: idCon,
+                                  textAlign: TextAlign.center,
                                   style: const TextStyle(color: Colors.blue, fontSize: 22),
                                   decoration: InputDecoration(
                                     filled: true,
                                     fillColor: Colors.transparent,
                                     border: InputBorder.none,
-                                    contentPadding: EdgeInsets.only(left: size.width * 0.03, bottom: 8.0, top: 4.0, right: size.width * 0.03),
+                                    contentPadding: EdgeInsets.only(left: size.width * 0.026, bottom: 4.0, top: 0.0, right: size.width * 0.026),
                                   ),
                                 ),
                               ),

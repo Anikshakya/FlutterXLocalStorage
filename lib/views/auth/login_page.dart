@@ -87,6 +87,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Center(
                 child: TextFormField(
                   controller: conStaffId,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 20),
                   decoration: InputDecoration(
                     filled: true,
